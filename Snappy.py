@@ -77,7 +77,7 @@ async def serverlist(ctx):
     await ctx.send("coming soon(TM)")
 
 
-@tasks.loop(seconds=CommonConfig().get_update_interval())
+@tasks.loop(seconds=int(CommonConfig().get_update_interval()))
 async def update_roles():
     guild = bot.get_guild(int(CommonConfig().get_guild_id()))
     roles = RolesConfig().get_roles()
@@ -89,13 +89,16 @@ async def update_roles():
             if mc_player['mcrole'].lower() in roles:
                 role = guild.get_role(int(roles[mc_player['mcrole'].lower()]))
                 if role not in member.roles:
+                    print(member.name + "'s Rollen wurden geupdatet")
                     await member.add_roles(role)
                     await member.send("Deine Rollen wurden aktualisiert!")
             verified = guild.get_role(int(CommonConfig().get_verified_role()))
             if verified not in member.roles:
+                print(member.name + " hat sich verifiziert")
                 await member.add_roles(verified)
                 await member.send("Du wurdest erfolgreich verifiziert!")
                 await guild.get_channel(int(CommonConfig().get_general())).send(member.mention + " hat sich erfolgreich verifiziert!")
+                await member.edit(nick=Player(uuid=mc_player['uuid']).username)
 
 
 def setup(setup_bot):
