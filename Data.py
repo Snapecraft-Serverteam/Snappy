@@ -150,6 +150,15 @@ class CommonConfig:
     def get_update_interval(self):
         return self.section['update_interval']
 
+
+class TokenConfig:
+    config = configparser.ConfigParser()
+    config.read("token.ini")
+    section = config['token']
+
+    def get_token(self):
+        return self.section['token']
+
 class Util:
     def id_generator(self, size: int, chars=string.ascii_uppercase + string.digits):
         return ''.join(random.choice(chars) for _ in range(size))

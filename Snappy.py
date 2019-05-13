@@ -6,9 +6,10 @@ import discord
 from discord.ext import commands, tasks
 from mojang_api import Player
 
+
 from CommandErrorHandler import CommandErrorHandler
 from Data import Database
-from Data import OntimeConfig, VerifyConfig, CommonConfig, RolesConfig
+from Data import OntimeConfig, VerifyConfig, CommonConfig, RolesConfig, TokenConfig
 from Data import Util
 from Errors import PlayerNotFoundError
 
@@ -105,7 +106,7 @@ async def update_roles():
 
 def setup(setup_bot):
     setup_bot.add_cog(CommandErrorHandler(setup_bot))
-    setup_bot.run(open("token.txt").read())
+    setup_bot.run(TokenConfig().get_token())
 
 
 setup(bot)
