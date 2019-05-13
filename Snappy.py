@@ -67,7 +67,7 @@ async def verify(ctx, name):
 @bot.command()
 async def ontime(ctx, name):
     for x in OntimeConfig().get_tables():
-        await ctx.send(x + ":  " + Util().formatDate(Database(host=OntimeConfig().get_host(), user=OntimeConfig().get_user(), database=OntimeConfig().get_db(), passwd=OntimeConfig().get_passwd()).get_ontime(name, x)))
+        await ctx.send(x + ":  " + Util().formatDate(Database(host=OntimeConfig().get_host(), user=OntimeConfig().get_user(), database=OntimeConfig().get_db(), passwd=OntimeConfig().get_passwd()).get_ontime(Player(username=name).uuid, x)))
 
 
 @bot.command()
