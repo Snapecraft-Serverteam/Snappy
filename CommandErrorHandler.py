@@ -3,6 +3,8 @@ import sys
 from discord.ext import commands
 import discord
 from Errors import PlayerNotFoundError
+from mysql.connector.errors import InterfaceError, ProgrammingError
+
 
 class CommandErrorHandler(commands.Cog):
     def __init__(self, bot):
@@ -34,6 +36,16 @@ class CommandErrorHandler(commands.Cog):
 
         elif isinstance(error, PlayerNotFoundError):
             return await ctx.send('Spieler nicht gefunden. Vergewissere dich noch einmal, ob der eingegebene Name korrekt ist.')
+
+        elif isinstance(error, KeyError):
+            return await ctx.send(
+                'Spieler nicht gefunden. Vergewissere dich noch einmal, ob der eingegebene Name korrekt ist.')
+
+        elif isinstance(error, InterfaceError):
+            return await ctx.send('Konnte nicht mit MySQL Datenbank verbinden. Bitte wende dich an einen Admin / Developer.')
+
+        elif isinstance(error, ProgrammingError):
+            return await ctx.send('Konnte nicht mit MySQL Datenbank verbinden. Bitte wende dich an einen Admin / Developer.')
 
         print('Ignoring exception in command {}:'.format(ctx.command), file=sys.stderr)
         traceback.print_exception(type(error), error, error.__traceback__, file=sys.stderr)

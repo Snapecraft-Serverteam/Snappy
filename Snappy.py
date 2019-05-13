@@ -1,4 +1,6 @@
 import asyncio
+import math
+
 import discord
 
 from discord.ext import commands, tasks
@@ -50,7 +52,7 @@ async def verify(ctx, name):
     temp_verification = db.create_temp_verfication(id=str(ctx.author.id), code=code, uuid=Player(username=name).uuid)
 
     if temp_verification == 0:
-        await ctx.send("Gib zum Verifizieren folgenden Command auf einem der Server ein:\n`/verify " + code + "`\nHinweis: Es kann bis zu " + str((int(CommonConfig().get_update_interval())/60)) + " Minuten dauern, bis du deinen Rang erhälst!")
+        await ctx.send("Gib zum Verifizieren folgenden Command auf einem der Server ein:\n`/verify " + code + "`\nHinweis: Es kann bis zu " + str(math.floor(int(CommonConfig().get_update_interval())/60)) + " Minuten dauern, bis du deinen Rang erhälst!")
     elif temp_verification == 1:
         await ctx.send("Account bereits verifiziert!")
 
