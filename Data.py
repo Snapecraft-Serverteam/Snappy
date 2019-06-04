@@ -132,7 +132,6 @@ class RolesConfig:
         return dict(self.section)
 
 
-
 class CommonConfig:
     config = configparser.ConfigParser()
     config.read("settings.ini")
@@ -159,6 +158,7 @@ class TokenConfig:
     def get_token(self):
         return self.section['token']
 
+
 class Util:
     def id_generator(self, size: int, chars=string.ascii_uppercase + string.digits):
         return ''.join(random.choice(chars) for _ in range(size))
@@ -171,3 +171,26 @@ class Util:
         minutes = int(minutes)
         hours = (millis / (1000 * 60 * 60)) % 24
         return "%dh %dmin" % (hours, minutes)
+
+
+class TagConfig:
+    config = configparser.ConfigParser()
+    config.read("tag.ini")
+    section = config['tags']
+
+    def get_blocked(self) -> list:
+        return list(self.config['blocked']['blocked'].split(","))
+
+    def get_all_tags_with_paths(self) -> dict:
+        return dict(self.config.items('tags'))
+
+    def get_all_tags(self) -> list:
+        return list(self.get_all_tags_with_paths().keys())
+
+
+    def get_path_of_tag(self, tag) -> str:
+        return self.section[tag]
+
+    def get_tag(self, path) -> str:
+        return str(open(path).read())
+
