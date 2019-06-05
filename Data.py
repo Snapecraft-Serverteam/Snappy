@@ -1,5 +1,3 @@
-from pprint import pprint
-
 import mysql.connector
 import configparser
 import string
