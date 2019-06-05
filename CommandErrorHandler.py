@@ -37,9 +37,6 @@ class CommandErrorHandler(commands.Cog):
         elif isinstance(error, PlayerNotFoundError):
             return await ctx.send('Spieler nicht gefunden. Vergewissere dich noch einmal, ob der eingegebene Name korrekt ist.')
 
-        elif isinstance(error, KeyError):
-            return await ctx.send(
-                'Spieler nicht gefunden. Vergewissere dich noch einmal, ob der eingegebene Name korrekt ist.')
 
         elif isinstance(error, InterfaceError):
             return await ctx.send('Konnte nicht mit MySQL Datenbank verbinden. Bitte wende dich an einen Admin / Developer.')

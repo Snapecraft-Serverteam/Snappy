@@ -187,10 +187,14 @@ class TagConfig:
     def get_all_tags(self) -> list:
         return list(self.get_all_tags_with_paths().keys())
 
-
     def get_path_of_tag(self, tag) -> str:
         return self.section[tag]
 
     def get_tag(self, path) -> str:
         return str(open(path).read())
+
+    def add_tag_to_config(self, path, name):
+        self.section[name] = path
+        with open('tag.ini', 'w') as configfile:
+            self.config.write(configfile)
 
