@@ -1,6 +1,7 @@
 import asyncio
 
 import discord
+from discord import Member
 from discord.ext import commands
 from fuzzywuzzy import process
 
@@ -40,27 +41,31 @@ class TagCog(commands.Cog):
             member = ctx.message.author
             # Check if member has a higher role than 'Moderator'
             # if member.top_role > ctx.guild.get_role(int(RolesConfig().get_roles()['Moderator'])):
-            if 0 == 0: # (<===) TODO: Change dis
-                if query.startswith("create"):
-                    def check(m):
-                        return m.author == ctx.author
-                    await ctx.channel.send("Erstelle Tag '" + query.split(' ')[1] + "'. Bitte gib den Text in __einer Nachricht__ an!")
 
-                    try:
-                        text = await self.bot.wait_for('message', check=check, timeout=30)
-                    except asyncio.TimeoutError:
-                        await ctx.channel.send("Breche ab, Timeout erreicht!")
-                    else:
-                        self.create_tag(query.split(' ')[1:], text.content, ctx.message.author.name)
-                        await ctx.channel.send("Tag erstellt!")
-                    # print(query)
+            if isinstance(member, Member):
+                if member.top_role > ctx.guild.get_role(int(TagConfig().get_min_role())):
+                    if query.startswith("create"):
+                        def check(m):
+                            return m.author == ctx.author
+                        await ctx.channel.send("Erstelle Tag '" + query.split(' ')[1] + "'. Bitte gib den Text in __einer Nachricht__ an!")
 
-                elif query.startswith("delete"):
-                    pass
-                elif query.startswith("list"):
-                    await ctx.channel.send("Folgende Tags sind verfügbar:\n\n" + '\n'.join(TagConfig().get_all_tags()))
+                        try:
+                            text = await self.bot.wait_for('message', check=check, timeout=30)
+                        except asyncio.TimeoutError:
+                            await ctx.channel.send("Breche ab, Timeout erreicht!")
+                        else:
+                            self.create_tag(query.split(' ')[1:], text.content, ctx.message.author.name)
+                            await ctx.channel.send("Tag erstellt!")
+                        # print(query)
+
+                    elif query.startswith("delete"):
+                        pass
+                    elif query.startswith("list"):
+                        await ctx.channel.send("Folgende Tags sind verfügbar:\n\n" + '\n'.join(TagConfig().get_all_tags()))
+                else:
+                    await ctx.send("Du hast leider nicht die nötige Berechtigung, um diesen Command auszuführen.")
             else:
-                await ctx.send("Du hast leider nicht die nötige Berechtigung, um diesen Command auszuführen.")
+                await ctx.send("Dieser Command kann nur auf einem Discord Server ausgeführt werden!")
 
     async def send_formatted_tag(self, tag_name, tag_text: str, channel):
         if tag_text.startswith('@'):
@@ -85,7 +90,7 @@ class TagCog(commands.Cog):
         if isinstance(tag_name, list):
             tag_name = '_'.join(tag_name)
 
-        file = open("tags/" + tag_name + ".txt", "w+")
+        file = open("tags/" + tag_name + ".txt", "w+", encoding='utf-8')
         file.write("@" + author + "\n")
         file.write(tag_text)
         file.close()

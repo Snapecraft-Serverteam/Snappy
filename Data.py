@@ -129,6 +129,9 @@ class RolesConfig:
     def get_roles(self) -> dict:
         return dict(self.section)
 
+    def get_role(self, name) -> str:
+        return self.section[name]
+
 
 class CommonConfig:
     config = configparser.ConfigParser()
@@ -189,10 +192,21 @@ class TagConfig:
         return self.section[tag]
 
     def get_tag(self, path) -> str:
-        return str(open(path).read())
+        return str(open(path, encoding='utf-8').read())
 
     def add_tag_to_config(self, path, name):
         self.section[name] = path
         with open('tag.ini', 'w') as configfile:
             self.config.write(configfile)
 
+    def get_min_role(self):
+        return str(configparser.ConfigParser().read("settings.ini")['guild']['min_tag_role'])
+
+
+class ModulesConfig:
+    config = configparser.ConfigParser()
+    config.read("settings.ini")
+    section = config['modules']
+
+    def is_enabled(self, name) -> bool:
+        return self.section[name] == "true"

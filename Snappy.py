@@ -9,7 +9,7 @@ from mojang_api import Player
 
 from CommandErrorHandler import CommandErrorHandler
 from CoreCog import CoreCog
-from Data import Database
+from Data import Database, ModulesConfig
 from Data import OntimeConfig, VerifyConfig, CommonConfig, RolesConfig, TokenConfig
 from Data import Util
 from Errors import PlayerNotFoundError
@@ -56,9 +56,16 @@ async def update_roles():
 
 def setup(setup_bot):
     setup_bot.add_cog(CommandErrorHandler(setup_bot))
-    setup_bot.add_cog(VerifyCog(setup_bot))
-    setup_bot.add_cog(CoreCog(setup_bot))
-    setup_bot.add_cog(TagCog(setup_bot))
+
+    if ModulesConfig().is_enabled("core"):
+        setup_bot.add_cog(CoreCog(setup_bot))
+
+    if ModulesConfig().is_enabled("verify"):
+        setup_bot.add_cog(VerifyCog(setup_bot))
+
+    if ModulesConfig().is_enabled("tags"):
+        setup_bot.add_cog(TagCog(setup_bot))
+
     setup_bot.run(TokenConfig().get_token())
 
 
