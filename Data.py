@@ -155,9 +155,19 @@ class TokenConfig:
     config = configparser.ConfigParser()
     config.read("token.ini")
     section = config['token']
+    twitter = config['twitter']
 
     def get_token(self):
         return self.section['token']
+
+    def get_twitter_tokens(self):
+        return TwitterLoginInfos(
+            self.twitter['apikey'],
+            self.twitter['apisecret'],
+            self.twitter['accesstoken'],
+            self.twitter['accesstokensecret'],
+        )
+
 
 
 class Util:
@@ -210,3 +220,31 @@ class ModulesConfig:
 
     def is_enabled(self, name) -> bool:
         return self.section[name] == "true"
+
+class TwitterLoginInfos:
+    apikey = ""
+    apisecret = ""
+    accesstoken = ""
+    accesstokensecret = ""
+    def __init__(self, key, secret, token, tokensecret):
+        self.apikey = key
+        self.apisecret = secret
+        self.accesstoken = token
+        self.accesstokensecret = tokensecret
+    def set_apikey(self, key):
+        self.apikey = key
+    def set_apiscrecet(self, key):
+        self.apisecret = key
+    def set_accesstoken(self, key):
+        self.accesstoken = key
+    def set_accesstokensecret(self, key):
+        self.accesstokensecret = key
+    def get_apikey(self):
+        return self.apikey
+    def get_apisecret(self):
+        return self.apisecret
+    def get_accesstoken(self):
+        return self.accesstoken
+    def get_accesstokensecret(self):
+        return self.accesstokensecret
+

@@ -15,6 +15,7 @@ from Data import Util
 from Errors import PlayerNotFoundError
 from TagCog import TagCog
 from VerifyCog import VerifyCog
+from TwitterCog import TwitterCog
 
 bot = commands.Bot(command_prefix='?')
 
@@ -66,6 +67,8 @@ def setup(setup_bot):
     if ModulesConfig().is_enabled("tags"):
         setup_bot.add_cog(TagCog(setup_bot))
 
+    if ModulesConfig().is_enabled("twitter"):
+        setup_bot.add_cog(TwitterCog(setup_bot))
     setup_bot.run(TokenConfig().get_token())
 
 
