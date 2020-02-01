@@ -1,4 +1,3 @@
-import discord
 from discord.ext import commands
 from twython import Twython
 from Data import TokenConfig, RolesConfig
@@ -11,10 +10,15 @@ class TwitterCog(commands.Cog):
         self.bot = bot
         tokens = TokenConfig()
         cred = tokens.get_twitter_tokens()
-        self.twitter = Twython(cred.get_apikey(),cred.get_apisecret(),cred.get_accesstoken(),cred.get_accesstokensecret())
+        self.twitter = Twython(
+            cred.get_apikey(),
+            cred.get_apisecret(),
+            cred.get_accesstoken(),
+            cred.get_accesstokensecret()
+        )
 
     @commands.command()
-    async def twitterit(self, obj, msg):
+    async def twitterit(self, obj):
         roles = RolesConfig()
         twitterrole = roles.get_role("Twitter")
         if obj.guild is None:
