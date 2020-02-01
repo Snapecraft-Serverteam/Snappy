@@ -15,11 +15,15 @@ class TwitterCog(commands.Cog):
 
 
     @commands.command()
-    async def twitterit(self, bot, msg):
-        print("Twitterit: " + msg + " from " + bot.author.name)
-        print("Sending...")
-        await self.sendtweet(msg + "\n " + bot.author.name)
-        print("Tweet gesendet. Nachricht: " + msg + "\n " + bot.author.name)
+    async def twitterit(self, obj, msg):
+        message = obj.message.content
+        message = message.replace(self.bot.command_prefix + "twitterit ", "")
+
+        print("[TWITTER] Sending....")
+        print("[TWITTER] " + message + "\n\n Von " + obj.author.name + " aus dem Snapecraft-Serverteam")
+        await self.sendtweet(message + "\n\n Von " + obj.author.name + " aus dem Snapecraft-Serverteam")
+        print("[TWITTER] Gesendet.")
 
     async def sendtweet(self, msg):
+        print()
         self.twitter.update_status(status=msg)
