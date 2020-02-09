@@ -1,8 +1,10 @@
 import discord
 from discord.ext import commands
 from mojang_api import Player
+import urllib.request
+import json
 
-from Data import OntimeConfig, Util, Database
+from Data import OntimeConfig, Util, Database, ServerlistConfig
 
 
 class CoreCog(commands.Cog):
@@ -23,7 +25,22 @@ class CoreCog(commands.Cog):
 
     @commands.command()
     async def serverlist(self, ctx):
-        await ctx.send("coming soon(TM)")
+        cfg = ServerlistConfig()
+        path = "http://" + cfg.get_host() + ":" + cfg.get_port() + "/" + cfg.get_context()
+        jsontext = urllib.request.urlopen(path).read()
+        jsonobj = json.loads(jsontext)
+        embed = discord.Embed(
+            title="Spielerliste des Snapecraft Servernetzwerkes",
+            color=0x36df9a
+        )
+        embed.set_author(name="Snappy")
+        for server in jsonobj:
+            embed.add_field(name=server, value=len(jsonobj[server]))
+        embed.set_footer(
+            text="https://snapecraft.net",
+            icon_url="https://snapecraft.net/wp-content/uploads/2019/01/discord.png"
+        )
+        await ctx.send(embed=embed)
 
     @commands.command()
     async def help(self, ctx):

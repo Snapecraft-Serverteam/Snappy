@@ -151,6 +151,21 @@ class CommonConfig:
         return self.section['update_interval']
 
 
+class ServerlistConfig:
+    config = configparser.ConfigParser()
+    config.read("settings.ini")
+    section = config['serverlist']
+
+    def get_host(self):
+        return self.section['host']
+
+    def get_port(self):
+        return self.section['port']
+
+    def get_context(self):
+        return self.section['context']
+
+
 class TokenConfig:
     config = configparser.ConfigParser()
     config.read("token.ini")
