@@ -149,6 +149,9 @@ class CommonConfig:
 
     def get_update_interval(self):
         return self.section['update_interval']
+    
+    def get_brainstorm_channel(self):
+        return self.section['brainstorm_channel']
 
 
 class ServerlistConfig:

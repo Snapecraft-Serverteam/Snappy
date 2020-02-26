@@ -6,7 +6,7 @@ import discord
 from discord.ext import commands, tasks
 from mojang_api import Player
 
-
+from BrainstormCog import BrainstormCog
 from CommandErrorHandler import CommandErrorHandler
 from CoreCog import CoreCog
 from Data import Database, ModulesConfig
@@ -33,6 +33,8 @@ async def on_ready():
 
 @tasks.loop(seconds=int(CommonConfig().get_update_interval()))
 async def update_roles():
+    if not ModulesConfig().is_enabled("verify"):
+        return
     guild = bot.get_guild(int(CommonConfig().get_guild_id()))
     roles = RolesConfig().get_roles()
     mc_players = Database(host=VerifyConfig().get_host(), user=VerifyConfig().get_user(), database=VerifyConfig().get_db(), passwd=VerifyConfig().get_passwd()).get_data()
@@ -69,6 +71,10 @@ def setup(setup_bot):
 
     if ModulesConfig().is_enabled("twitter"):
         setup_bot.add_cog(TwitterCog(setup_bot))
+
+    if ModulesConfig().is_enabled("brainstorm"):
+        setup_bot.add_cog(BrainstormCog(setup_bot))
+
     setup_bot.run(TokenConfig().get_token())
 
 
